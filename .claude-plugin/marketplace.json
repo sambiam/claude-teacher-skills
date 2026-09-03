@@ -1,0 +1,19 @@
+{
+  "name": "claude-teacher-skills",
+  "owner": {
+    "name": "Sam Bowler"
+  },
+  "description": "Maths teaching skills for Claude — lesson planning, slide decks, worksheets, tests, and practice.",
+  "plugins": [
+    {
+      "name": "maths-teaching-skills",
+      "source": "./",
+      "description": "18 skills for planning, building, and auditing maths lessons — atomising content, designing teaching sequences, building slide decks, worksheets, tests, and practice, and auditing existing resources.",
+      "author": {
+        "name": "Sam Bowler"
+      },
+      "repository": "https://github.com/sambiam/claude-teacher-skills",
+      "keywords": ["education", "maths", "lesson-planning", "worksheets", "assessment"]
+    }
+  ]
+}
