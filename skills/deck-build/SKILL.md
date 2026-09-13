@@ -98,6 +98,7 @@ templates/slide-patterns.pptx     one worked example of each recurring pattern
 scripts/copy_slide.py             slide copying, leftover audit
 scripts/omml.py                   LaTeX -> real PowerPoint equation objects
 scripts/anim.py                   click-to-reveal entrance animations
+scripts/triangle_geometry.py      vertices, labels and tick marks for a custom triangle diagram
 ```
 
 **Copy the pattern; don't rebuild it.** These positions have been used in front
@@ -229,6 +230,66 @@ a Make Math Moments 3-act, an Esti-Mystery, an nrich problem — build the slide
 it needs (the notice-and-wonder, the reveal, the follow-up question) and add a
 small **Lesson resources** slide holding the links, so the teacher can find the
 video from inside the deck on the day.
+
+## Geometry diagram construction
+
+For a **custom** diagram — one drawn in code because no template pattern
+covers it, most often a labelled triangle for a trig lesson — don't re-derive
+the coordinate geometry inline. `scripts/triangle_geometry.py` builds the
+vertices, a mirrored second triangle, label-anchor points for each vertex and
+side midpoint, tick-mark endpoints for a side, and an angle-bisector point for
+a badge:
+
+```python
+import sys; sys.path.insert(0, "scripts")
+from triangle_geometry import (triangle_sas, triangle_sss, mirror,
+                                label_anchors, tick_marks,
+                                angle_badge_point, interior_angles)
+
+tri = triangle_sas(p=7, theta_deg=52, q=9)   # two sides + included angle
+anchors = label_anchors(tri, vertex_offset=0.3, side_offset=0.3)
+ticks = tick_marks(tri, "AB", count=1)
+```
+
+`triangle_sas`/`triangle_sss` return vertices `'A'`/`'B'`/`'C'` plus a `sides`
+dict on the standard convention (side `a` = BC opposite A, and so on), so a
+diagram's labels line up with whatever the worked solution calls each side.
+
+**Gotchas specific to drawing this in a slide library:**
+
+- **A `line` shape (pptxgenjs) only draws within its own bounding box.** An
+  arbitrary diagonal from `(x1,y1)` to `(x2,y2)` needs
+  `x=min(x1,x2), y=min(y1,y2), w=|x2-x1|, h=|y2-y1|, flipH=(x2<x1), flipV=(y2<y1)`,
+  or a diagonal drawn "backwards" fails to appear or renders reflected into
+  the wrong quadrant of its box. python-pptx's `add_connector` takes the two
+  endpoints directly and doesn't have this problem.
+- **There's no usable small-arc primitive for an angle mark**, in either
+  library. Don't try to draw one — use coloured, matched text instead, per the
+  labelling convention below.
+
+**Diagram-labelling convention**, so custom diagrams match the house style
+referenced above rather than inventing a new one per lesson:
+
+- Variables and unknowns are italic — bold italic inside the diagram (needs
+  to be spotted fast), plain italic inline in question text. An italic
+  serif/maths face — Cambria Math, or italic Cambria or Times as a fallback.
+  Never bold upright sans-serif.
+- Never put a filled circle or badge behind a value purely to show it
+  corresponds to another value — a tick mark (sides) or a consistent accent
+  colour (angles) already carries that, and a background shape is decorative
+  content competing with instructional content.
+- Default 3-colour convention: `#262626` (near-black) for given values and
+  outlines, `#1F4E79` (navy) for correspondence marks (matching ticks,
+  matching-coloured angle text), `#C00000` (red, matching the colour already
+  used for worked-solution values elsewhere in this plugin) for the unknown.
+
+**Geometry QA check**, alongside the label-spacing check already covered under
+**Before handing over**: after rendering, confirm the drawn proportions
+plausibly match the stated numbers — the longest labelled side should look
+longest, a given obtuse angle shouldn't render as visibly acute.
+`interior_angles()` on the built triangle gives the actual numbers to compare
+against the question; a mismatch is a sign or offset error in the coordinate
+math, which a text-only slide audit won't catch.
 
 ## Structure
 
@@ -623,7 +684,11 @@ class of bug has to be caught by looking rather than by copying a pattern that
 already got it right. A flat vertical offset applied uniformly to every label
 is a common cause of inconsistent spacing on anything but a horizontal top
 edge — check a bottom edge and a slanted edge specifically, not just whichever
-one happened to render first.
+one happened to render first. `label_anchors()` in
+`scripts/triangle_geometry.py` (see **Geometry diagram construction**) avoids
+this by construction — it offsets each label along its own direction from the
+centroid rather than by a flat vertical shift — so prefer it over hand-placed
+coordinates for a triangle diagram.
 
 Two things the PDF will not tell you, so say them in your report rather than
 implying they were checked: **click animations don't survive the export** (the

@@ -10,6 +10,7 @@ working boxes, and checking that what you built is what you meant.
 - Page setup
 - The working-space pattern
 - Equations (OMML) — verified code
+- Geometry diagrams
 - Building the answer sheet from the same source
 - Rendering and checking
 - Editing an existing worksheet
@@ -120,6 +121,56 @@ fractions, and fractional indices must render as a fraction in the exponent.
 
 A `Math` object can sit in a paragraph alongside `TextRun`s, so question
 labels and equations share one line without a text-mode approximation.
+
+## Geometry diagrams
+
+`docx-js` has no vector-drawing API worth using for a labelled triangle.
+Build the diagram as an image and embed it with `ImageRun` the same as any
+other picture — don't try to construct shapes out of borders and tables.
+
+Don't work out the vertices, mirrored second triangle, label positions, tick
+marks or angle-bisector point by hand for each question — that coordinate
+geometry is identical every time and is worked out once in
+`scripts/triangle_geometry.py` (Python; run it as a separate step before the
+`docx-js` build, then render its output to an image and pass the image path
+into the build script):
+
+```python
+import sys; sys.path.insert(0, "scripts")
+from triangle_geometry import triangle_sas, triangle_sss, label_anchors, tick_marks
+
+tri = triangle_sas(p=7, theta_deg=52, q=9)      # two sides + included angle
+anchors = label_anchors(tri, vertex_offset=0.3, side_offset=0.3)
+ticks = tick_marks(tri, "AB", count=1)
+# then render tri/anchors/ticks with matplotlib or Pillow at print
+# resolution (≈300 dpi for the printed page) and save as PNG/SVG
+```
+
+`triangle_sas`/`triangle_sss` return vertices `'A'`/`'B'`/`'C'` plus a `sides`
+dict on the standard convention (side `a` = BC opposite A, and so on), so the
+diagram's labels line up with whatever the answer sheet's working calls each
+side. `interior_angles()` and `side_lengths()` read the angles and lengths
+back off the built triangle — use them as a QA check after rendering: the
+longest labelled side should look longest and a given obtuse angle shouldn't
+render as visibly acute, or there's a sign/offset error in the coordinates
+that a text-only proof-read won't catch.
+
+Match the same labelling convention `deck-build` and `ssdd-build` use, so a
+diagram doesn't look different depending on which skill produced it:
+variables and unknowns in italic (an italic serif/maths face — Cambria Math,
+or italic Cambria/Times as a fallback — never bold upright sans-serif); no
+filled circle or badge behind a value purely to show correspondence, since a
+tick mark or a consistent accent colour already carries that meaning; and the
+plugin's default 3-colour convention — `#262626` (near-black) for given
+values and outlines, `#1F4E79` (navy) for correspondence marks, `#C00000`
+(red) for the unknown. Colour still has to survive greyscale printing per
+**Page setup** above, so also distinguish the unknown by the italic "x" label
+itself, not by colour alone.
+
+`line`-type bounding-box quirks from pptxgenjs/python-pptx don't apply
+here — `matplotlib`/Pillow both draw an arbitrary line from two endpoints
+directly — but there's still no small-arc primitive worth using for an angle
+mark in either; use coloured, matched text instead.
 
 ## Building the answer sheet from the same source
 

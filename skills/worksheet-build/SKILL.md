@@ -39,8 +39,8 @@ whether anything is needed at all.
 - `references/question-design.md` — variation theory, section contents,
   enrichment sources. Read before writing any questions.
 - `references/docx-production.md` — page setup, the working-space table
-  pattern, verified Word equation code, the render-and-check loop. Read before
-  building the DOCX.
+  pattern, verified Word equation code, geometry diagram construction, the
+  render-and-check loop. Read before building the DOCX.
 
 Where this file and a reference file disagree, this file wins.
 
