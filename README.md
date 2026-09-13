@@ -1,10 +1,11 @@
 # Maths Teaching Skills Pack
 
-18 skills for planning, building, and auditing maths lessons — atomising
-content, designing teaching sequences, building slide decks, worksheets,
-tests, and practice, and auditing existing resources.
+20 skills for planning, building, and auditing maths lessons — atomising
+content, designing teaching sequences and explanation scripts, building slide
+decks, worksheets, tests, practice, and relief lessons, and auditing existing
+resources.
 
-This is a **plugin bundle**: all 18 skills below install in one step,
+This is a **plugin bundle**: all 20 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -17,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 18 skills are added in one go. To update later, run
+All 20 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -30,11 +31,12 @@ claude plugin validate .
 ## Setup this pack assumes
 
 Several skills (`test-build`, `practice-test-build`, `assessment-audit`,
-`ink-progress`, `deck-build`, `practice-audit`, `senior-homework-build`)
-work by reading files from an existing class/topic folder structure rather
-than from uploads — e.g. prior tests, unit outlines, lesson decks. For these
-to work, you'll need an equivalent folder layout connected to Claude
-(matching class → topic → resource files), not just the skills themselves.
+`ink-progress`, `deck-build`, `practice-audit`, `senior-homework-build`,
+`explanation-script`, `relief-setter`) work by reading files from an existing
+class/topic folder structure rather than from uploads — e.g. prior tests, unit
+outlines, lesson decks, atomisations. For these to work, you'll need an
+equivalent folder layout connected to Claude (matching class → topic →
+resource files), not just the skills themselves.
 
 Skills that don't depend on a folder (`atomise`, `teaching-sequence`,
 `open-middle-build`, `slop-build`, `ssdd-build`, `lesson-rationale`,
@@ -49,6 +51,7 @@ them as slides.
 |---|---|
 | atomise | Breaks a lesson/topic/exam question into its teachable atoms, misconceptions, and prerequisite map |
 | teaching-sequence | Designs the instructional sequence, examples, and diagnostic questions for an atom |
+| explanation-script | Writes the faultless-communication narration script for a worked example |
 | deck-build | Builds (or repairs) a lesson PowerPoint from proven slide patterns |
 | worksheet-build | Produces a printable worksheet + answer sheet (Mild/Medium/Spicy + Extra Hot) |
 | test-build | Builds a new student assessment + worked solutions from prior tests in a topic folder |
@@ -65,6 +68,7 @@ them as slides.
 | senior-homework-build | Builds the weekly Y10-12 homework sheet + solutions from the week's decks |
 | ink-progress | Reads ink annotations on a taught deck to work out how far a lesson got |
 | sa-task-design | Designs a task that develops the SA dispositions, from a verified offline bank of 48 tasks |
+| relief-setter | Builds a cover note and self-contained resources for a lesson you won't be there to teach |
 
 ## One note on sharing
 
