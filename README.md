@@ -1,11 +1,11 @@
 # Maths Teaching Skills Pack
 
-20 skills for planning, building, and auditing maths lessons — atomising
+21 skills for planning, building, and auditing maths lessons — atomising
 content, designing teaching sequences and explanation scripts, building slide
-decks, worksheets, tests, practice, and relief lessons, and auditing existing
-resources.
+decks, worksheets, tests, practice, labelled diagrams, and relief lessons,
+and auditing existing resources.
 
-This is a **plugin bundle**: all 20 skills below install in one step,
+This is a **plugin bundle**: all 21 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -18,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 20 skills are added in one go. To update later, run
+All 21 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -43,7 +43,8 @@ Skills that don't depend on a folder (`atomise`, `teaching-sequence`,
 `differentiation-pack`, `non-routine-build`, `practice-select`) will work
 standalone. `sa-task-design` designs and verifies tasks standalone from its
 own offline bank, but needs `deck-build`'s template and scripts to render
-them as slides.
+them as slides. `diagram-labels` is a supporting skill other skills call
+into when a diagram needs to go on the page — it isn't invoked directly.
 
 ## What's included
 
@@ -69,6 +70,7 @@ them as slides.
 | ink-progress | Reads ink annotations on a taught deck to work out how far a lesson got |
 | sa-task-design | Designs a task that develops the SA dispositions, from a verified offline bank of 48 tasks |
 | relief-setter | Builds a cover note and self-contained resources for a lesson you won't be there to teach |
+| diagram-labels | Renders a diagram as a static image with movable, editable text-box labels overlaid for DOCX/PPTX |
 
 ## One note on sharing
 
