@@ -1,7 +1,7 @@
 {
   "name": "maths-teaching-skills",
-  "version": "0.3.0",
-  "description": "21 skills for planning, building, and auditing maths lessons — atomising content, designing teaching sequences and explanation scripts, building slide decks, worksheets, tests, practice, labelled diagrams, and relief lessons, and auditing existing resources.",
+  "version": "0.4.0",
+  "description": "22 skills for planning, building, and auditing maths lessons — atomising content, designing teaching sequences and explanation scripts, building slide decks, worksheets, tests, practice, labelled diagrams, and relief lessons, giving feedback on student drafts, and auditing existing resources.",
   "author": {
     "name": "Sam Bowler"
   },
