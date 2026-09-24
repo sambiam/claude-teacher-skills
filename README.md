@@ -1,11 +1,11 @@
 # Maths Teaching Skills Pack
 
-21 skills for planning, building, and auditing maths lessons — atomising
+22 skills for planning, building, and auditing maths lessons — atomising
 content, designing teaching sequences and explanation scripts, building slide
-decks, worksheets, tests, practice, labelled diagrams, and relief lessons,
+decks, worksheets, tests, practice, labelled diagrams, and relief lessons, giving feedback on student drafts,
 and auditing existing resources.
 
-This is a **plugin bundle**: all 21 skills below install in one step,
+This is a **plugin bundle**: all 22 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -18,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 21 skills are added in one go. To update later, run
+All 22 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -32,7 +32,7 @@ claude plugin validate .
 
 Several skills (`test-build`, `practice-test-build`, `assessment-audit`,
 `ink-progress`, `deck-build`, `practice-audit`, `senior-homework-build`,
-`explanation-script`, `relief-setter`) work by reading files from an existing
+`explanation-script`, `relief-setter`, `draft-feedback`) work by reading files from an existing
 class/topic folder structure rather than from uploads — e.g. prior tests, unit
 outlines, lesson decks, atomisations. For these to work, you'll need an
 equivalent folder layout connected to Claude (matching class → topic →
@@ -58,6 +58,7 @@ into when a diagram needs to go on the page — it isn't invoked directly.
 | test-build | Builds a new student assessment + worked solutions from prior tests in a topic folder |
 | practice-test-build | Builds the revision paper students sit before the real test |
 | assessment-audit | Audits a unit's tests/assessments for completeness and quality |
+| draft-feedback | Marks a class set of student drafts against a task sheet — Word comments, yellow-highlighted spelling/grammar, on-track summary table |
 | practice-audit | Judges whether existing practice is sufficient for a lesson |
 | practice-select | Decides which kind of practice a lesson needs and routes to the right skill |
 | slop-build | Writes sequenced fluency practice (SLOP / minimally different questions) |
