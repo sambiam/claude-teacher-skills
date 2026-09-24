@@ -1,11 +1,11 @@
 # Maths Teaching Skills Pack
 
-22 skills for planning, building, and auditing maths lessons — atomising
+23 skills for planning, building, and auditing maths lessons — atomising
 content, designing teaching sequences and explanation scripts, building slide
 decks, worksheets, tests, practice, labelled diagrams, and relief lessons, giving feedback on student drafts,
-and auditing existing resources.
+building rubrics, and auditing existing resources.
 
-This is a **plugin bundle**: all 22 skills below install in one step,
+This is a **plugin bundle**: all 23 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -18,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 22 skills are added in one go. To update later, run
+All 23 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -40,7 +40,7 @@ resource files), not just the skills themselves.
 
 Skills that don't depend on a folder (`atomise`, `teaching-sequence`,
 `open-middle-build`, `slop-build`, `ssdd-build`, `lesson-rationale`,
-`differentiation-pack`, `non-routine-build`, `practice-select`) will work
+`differentiation-pack`, `non-routine-build`, `practice-select`, `rubric-build`) will work
 standalone. `sa-task-design` designs and verifies tasks standalone from its
 own offline bank, but needs `deck-build`'s template and scripts to render
 them as slides. `diagram-labels` is a supporting skill other skills call
@@ -72,6 +72,7 @@ into when a diagram needs to go on the page — it isn't invoked directly.
 | sa-task-design | Designs a task that develops the SA dispositions, from a verified offline bank of 48 tasks |
 | relief-setter | Builds a cover note and self-contained resources for a lesson you won't be there to teach |
 | diagram-labels | Renders a diagram as a static image with movable, editable text-box labels overlaid for DOCX/PPTX |
+| rubric-build | Builds a marking rubric from a task sheet — a standard table rubric or a Daymap .rbc import file (asks which first) |
 
 ## One note on sharing
 
