@@ -1,11 +1,11 @@
 # Maths Teaching Skills Pack
 
-23 skills for planning, building, and auditing maths lessons — atomising
+24 skills for planning, building, and auditing maths lessons — atomising
 content, designing teaching sequences and explanation scripts, building slide
 decks, worksheets, tests, practice, labelled diagrams, and relief lessons, giving feedback on student drafts, grading final assignments,
 and auditing existing resources.
 
-This is a **plugin bundle**: all 23 skills below install in one step,
+This is a **plugin bundle**: all 24 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -18,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 23 skills are added in one go. To update later, run
+All 24 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -32,7 +32,7 @@ claude plugin validate .
 
 Several skills (`test-build`, `practice-test-build`, `assessment-audit`,
 `ink-progress`, `deck-build`, `practice-audit`, `senior-homework-build`,
-`explanation-script`, `relief-setter`, `draft-feedback`, `final-grading`) work by reading files from an existing
+`explanation-script`, `relief-setter`, `draft-feedback`, `final-grading`, `exam-revision-homework`) work by reading files from an existing
 class/topic folder structure rather than from uploads — e.g. prior tests, unit
 outlines, lesson decks, atomisations. For these to work, you'll need an
 equivalent folder layout connected to Claude (matching class → topic →
@@ -69,6 +69,7 @@ into when a diagram needs to go on the page — it isn't invoked directly.
 | differentiation-pack | Builds support/extension materials for mixed classes, incl. SSO guided notes |
 | lesson-rationale | Builds the "why are we learning this" slides — prior/future knowledge, hinterland, headache task |
 | senior-homework-build | Builds the weekly Y10-12 homework sheet + solutions from the week's decks |
+| exam-revision-homework | Builds a series of weekly revision homework sets before an exam — printable, questions-only and ticked-solutions versions in the school layout |
 | ink-progress | Reads ink annotations on a taught deck to work out how far a lesson got |
 | sa-task-design | Designs a task that develops the SA dispositions, from a verified offline bank of 48 tasks |
 | relief-setter | Builds a cover note and self-contained resources for a lesson you won't be there to teach |
