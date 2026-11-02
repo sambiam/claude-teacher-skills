@@ -1,5 +1,5 @@
 ---
-name: practice-test-build
+name: "practice-test-build"
 description: "Build the revision paper a maths class sits before the real topic test, plus its worked answer sheet — same skills and mark weighting as the real test, but the questions asked in enough different ways that students can't rehearse it. Use whenever a practice test, revision test, practice paper, mock, pre-test or 'something to see if they're ready' is needed, including 'make a practice test for the equations topic', 'the kids need revision before Friday's test', 'build a practice paper that matches the 2026 test', or 'is there a practice test for this unit'. Also use to fix a practice paper that is too close to the real one, too hard, or short on fluency practice. Works from the topic folder: it finds the real test itself. For the graded test students actually sit, use test-build."
 ---
 
@@ -170,34 +170,39 @@ Read its docstring first. Two silent traps cost the most time: an equation
 element that starts or ends with `=`, and an unbalanced fragment inside a
 bracket. Both look right in the source and render as `¿` in the PDF.
 
-### Answer sheet
+### Answer sheet (handwritten)
 
-Build it from the finished student file — copy it, type the working into the
-same grids, export to PDF. Three things make it hold:
+The answer sheet is **handwritten in Sam's writing as Word ink over the
+finished student paper**, using the `handwritten-solutions` skill. Load it and
+follow it; in short:
 
-- Insert solutions **immediately after the question paragraph** in each cell,
-  not appended at the end, or they sink to the bottom of a tall box far from
-  the question.
-- Every answer goes inside a **fixed-height container**. Answers with nowhere
-  natural to sit — a blank in the question line, a circled option — need
-  reserved space too; `slot()` gives an invisible fixed-height strip that is
-  blank on the student version. Without it the two documents paginate
-  differently and stop lining up.
-- One real tick glyph per mark, method marks against the line where the
-  approach appears. Never put a literal `✓` inside solution prose — a
-  "Check: … ✓" line reads as a mark tick and inflates the count.
+- Build only from the **final** practice paper — the ink is anchored to its
+  working-space cells.
+- Work every answer first (Step 5), and check how each method was taught in
+  the topic's lesson decks so the working matches the teaching.
+- `python grids.py practice.docx`, write `spec.py` (one list of lines per
+  part, `\tick` once per mark: method ticks on the method line, answer ticks
+  on the answer), then
+  `python inkdoc.py practice.docx spec.py "<…> SOLUTIONS (handwritten).docx" --pdf`.
+- Every answer needs a **fixed-height space** to ink into. Answers with nowhere
+  natural to sit — a blank in the question line, a circled option — get a
+  `slot()` strip, blank on the student version.
+- Ticks are only `\tick`s. Never write a ✓ inside the working.
+
+`references/solutions-overlay.md` still defines what the answer sheet must
+contain and where the marks go; its typed and raster production methods are
+superseded.
 
 ## Step 5: Verify
 
 ```bash
-python scripts/check_marks.py practice.docx --expect 40 --tick-manifest ticks.json
-python scripts/check_layout.py practice.docx --solutions answers.docx --max-pages 4
+python scripts/check_marks.py practice.docx --expect 40
+python scripts/check_layout.py practice.docx --solutions "<…> SOLUTIONS (handwritten).docx" --max-pages 4
 ```
 
-Give the tick manifest the **same granularity as the printed mark
-allocations** — if the paper says `[4 marks]` once for parts (a)–(d), the
-manifest needs one key worth 4, not four keys worth 1, or the check reports a
-mismatch that isn't there.
+Ticks are checked by `inkdoc.py` against the `[n marks]` printed under each
+working space — if the paper says `[4 marks]` once for parts (a)–(d), the
+four ticks are spread across those parts in that one space.
 
 `check_layout.py` catches what the source can't show: the real page count, a
 blank or nearly-empty final page, and whether the answer sheet paginates
@@ -228,7 +233,9 @@ Then look at the rendered pages:
 - [ ] No blank or nearly-blank final page; within the page limit
 - [ ] No `¿` and no plain-text mathematics anywhere
 - [ ] Answer sheet matches the student paper page for page
-- [ ] Ticks per question equal its marks
+- [ ] Handwriting sits in its boxes, smooth and legible at 300 dpi, working
+      in the taught method
+- [ ] Ticks per question equal its marks (inkdoc: `ticks n / marks n`)
 
 ## Step 6: Save and report
 
@@ -237,7 +244,9 @@ paper:
 
 ```
 <topic>/Revision/<Year> <Topic> Practice Test.docx
-<topic>/Revision/<Year> <Topic> Practice Test SOLUTIONS.pdf
+<topic>/Revision/<Year> <Topic> Practice Test SOLUTIONS (handwritten).docx
+<topic>/Revision/<Year> <Topic> Practice Test SOLUTIONS (handwritten).pdf
+<topic>/Revision/<Year> <Topic> Practice Test - handwritten spec.py
 ```
 
 The report is where the teacher checks the judgement calls. Give them:
@@ -262,7 +271,9 @@ and the paper is never "ready to hand out" on this skill's say-so.
 - `references/question-design.md` — question design rules, difficulty balance
 - `references/layout-and-formatting.md` — working spaces, page discipline,
   mathematical formatting
-- `references/solutions-overlay.md` — answer sheets, ticks, mark placement
+- `references/solutions-overlay.md` — what answer sheets contain, ticks, mark
+  placement (production now via `handwritten-solutions`)
+- `handwritten-solutions` skill — writes the answer sheet in Sam's handwriting
 - `scripts/docx_math.py` — Word equation objects and layout primitives
 - `scripts/check_marks.py` — mark and tick arithmetic
 - `scripts/check_layout.py` — page count, blank pages, pagination parity

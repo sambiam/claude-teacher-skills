@@ -1,5 +1,5 @@
 ---
-name: test-build
+name: "test-build"
 description: "Create a new student assessment and matching worked solutions for a maths class, built from the tests already sitting in that class's topic folder and formatted to the school's assessment template. Use whenever a test, topic test, practice exam, or assessment needs writing or refreshing for a new year — including 'make a practice exam for', 'we need a new version of the trig test', 'write a test on', or 'build an assessment for Year 11'. Also use when checking that a drafted assessment's marks, layout, and solutions are sound. Works from the folder, not from uploads: it finds prior tests itself. For a revision paper students sit *before* the real test, use practice-test-build instead."
 ---
 
@@ -10,8 +10,9 @@ conventions, command words, and front-page furniture should all read as though
 they came from the same faculty that wrote the prior papers.
 
 Produces two things: a student assessment as a Word document, and worked
-solutions as a PDF with the working sitting in the working spaces of that exact
-assessment.
+solutions **handwritten in Sam's writing as Word ink over that exact
+assessment** (via `handwritten-solutions`) — an editable ink `.docx` plus a
+print PDF, with the working sitting in the working spaces.
 
 The prior tests in the topic folder are the specification. They encode
 difficulty that has been calibrated against real students, topic weighting that
@@ -84,7 +85,7 @@ year. Build what they asked for and flag the mismatch in the report. If new
 information arrives that would have changed their answer, go back to them.
 
 Unless told otherwise, the output is a student assessment as a **Word document**
-and worked solutions as a **PDF**.
+and handwritten worked solutions (ink `.docx` + **PDF**).
 
 ## Step 3: Analyse before writing
 
@@ -164,52 +165,61 @@ inside a delimiter. Both look correct in the source and render as `¿` in the
 PDF that actually ships.
 
 Working grids must have **exact** row heights (`grid()` sets this). That is
-what lets the solutions be typed into the same layout without the two documents
-drifting apart.
+what lets the handwritten ink be anchored into the grid cells without the
+solutions drifting off their questions.
 
-## Step 5: Produce the worked solutions
+## Step 5: Produce the worked solutions (handwritten)
 
-Read `references/solutions-overlay.md`.
+Solutions are written **in Sam's handwriting as Word ink over the finished
+student paper**, using the `handwritten-solutions` skill. Load it and follow
+it; in short:
 
-The method that holds up best is the **derived document**: copy the finished
-student file, type the working into the same grids, export to PDF. Because the
-same layout engine places everything, nothing drifts when the paper is
-regenerated, and the PDF keeps selectable text.
+1. Build only from the **final** student `.docx` — the ink is anchored to its
+   working-space cells, so any later edit to the paper means re-inking.
+2. Work every answer first (Step 6, *Work every answer independently*), and
+   check how each method was taught in the topic's lesson decks
+   (`handwritten-solutions` Step 1) so the working matches the teaching — e.g.
+   tangents as `y = f'(a)(x - a) + f(a)`, derivatives via index form first.
+3. `python grids.py student.docx` numbers the working spaces; write `spec.py`
+   with one list of lines per part and `\tick` once per mark — method ticks on
+   the line where the approach appears, answer ticks on the final answer. The
+   content rules in `references/solutions-overlay.md` (step-by-step working,
+   units, model responses for interpretation questions, ticks = marks, where
+   the marks are) still apply; its typed "derived document" and raster-overlay
+   production methods are **superseded** by this.
+4. `python inkdoc.py student.docx spec.py "<…> SOLUTIONS (handwritten).docx" --pdf`
+   reports ticks against each `[n marks]`, and any box the working ran past or
+   was written smaller in.
 
-Three rules make it work:
+Two rules carry over from the typed method:
 
-- Insert solution paragraphs **immediately after the question paragraph** in
-  each cell. Appended at the end of a cell they sink below the blank
-  paragraphs and surface at the bottom of a tall box, far from the question.
-- Every answer must sit inside a **fixed-height container**. Answers with
-  nowhere natural to go — a blank in the question line, a circled option —
-  still need reserved space, or the solutions paginate differently from the
-  student paper and stop lining up. `slot()` gives an invisible fixed-height
-  strip that is blank on the student version.
-- Ticks must be real tick glyphs, one per mark, with method marks against the
-  line where the approach appears and answer marks against the final answer.
-  Never put a literal `✓` inside solution *prose* (a "Check: … ✓" line) — it
-  reads as a mark tick and inflates the count.
+- Every answer needs a **fixed-height space** on the student paper to ink
+  into. Answers with nowhere natural to go — a blank in the question line, a
+  circled option — still get a `slot()` strip (blank on the student version),
+  which `handwritten-solutions` treats as a box.
+- Ticks are only ever `\tick` marks, one per mark. Never write a ✓ inside the
+  working ("Check: … ✓") — it reads as a mark and inflates the count.
 
 ## Step 6: Verify
 
 ### Scripted checks
 
 ```bash
-python scripts/check_marks.py student.docx --expect 80 --solutions solutions.docx
-python scripts/check_layout.py student.docx --solutions solutions.docx --max-pages 4
+python scripts/check_marks.py student.docx --expect 80
+python scripts/check_layout.py student.docx --solutions "<…> SOLUTIONS (handwritten).docx" --max-pages 4
 ```
 
-`check_marks.py` reports whether the allocations sum to the declared total and
-whether the tick count matches. Give the tick manifest keys the **same
-granularity as the mark allocations printed on the paper** — if the paper says
-`[4 marks]` once for parts (a)–(d), the manifest needs one key worth 4, not
-four keys worth 1, or the check reports a phantom mismatch.
+`check_marks.py` reports whether the allocations sum to the declared total.
+The tick count is checked by `inkdoc.py` when it builds the handwritten
+solutions: it compares the `\tick`s in each working space with the `[n marks]`
+printed under it, so put all of a question's ticks in the space that line
+belongs to — if the paper says `[4 marks]` once for parts (a)–(d), the four
+ticks are spread across those parts' columns of that one grid.
 
 `check_layout.py` renders both documents and reports the true page count, where
 content stops on each page, a blank or nearly-blank final page, and whether the
-solutions paginate identically to the student paper. None of that can be judged
-from the source.
+solutions paginate identically to the student paper (the ink floats over the
+cells, so they always should). None of that can be judged from the source.
 
 **Install `libreoffice-math` first.** Without it LibreOffice silently drops
 every Word equation, and the rendered pages show blank working spaces where the
@@ -266,11 +276,14 @@ cover arithmetic and pagination; everything here needs looking at.
 - [ ] No blank or nearly-blank final page
 - [ ] No meta-commentary leaked into the student document
 
-**Solutions**
+**Solutions (handwritten)**
 - [ ] Page count and page positions match the student document exactly
-- [ ] Solutions sit inside their working spaces and don't spill past them
+- [ ] Ink sits inside its working spaces; any run-over below a box is small and
+      clear of the next question
+- [ ] Working follows the method as taught in the lesson decks
 - [ ] Question text is readable on every page
-- [ ] Ticks render as ticks, and the count per question equals its marks
+- [ ] Strokes smooth and legible at 300 dpi — indices, fractions, decimal points
+- [ ] Ticks per question equal its marks (inkdoc reports `ticks n / marks n`)
 - [ ] Step-by-step working shown for anything multi-step
 - [ ] Model responses given for interpretation questions
 - [ ] Built from the final student document, not an earlier draft
@@ -282,7 +295,9 @@ previous year's paper:
 
 ```
 <topic>/<Class> <Topic> <Type> <Year>.docx
-<topic>/<Class> <Topic> <Type> <Year> SOLUTIONS.pdf
+<topic>/<Class> <Topic> <Type> <Year> SOLUTIONS (handwritten).docx
+<topic>/<Class> <Topic> <Type> <Year> SOLUTIONS (handwritten).pdf
+<topic>/<Class> <Topic> <Type> <Year> - handwritten spec.py
 ```
 
 Then report, outside the student document:
@@ -306,8 +321,11 @@ describe the paper as ready to hand out.
   application questions belong
 - `references/layout-and-formatting.md` — front page, working grids, mark
   placement, mathematical formatting
-- `references/solutions-overlay.md` — producing the solutions, the tick
-  manifest, and the raster-overlay alternative
+- `references/solutions-overlay.md` — what the solutions must contain and
+  where the marks go (its production methods are superseded by
+  `handwritten-solutions`)
+- `handwritten-solutions` skill — produces the solutions as ink in Sam's
+  handwriting
 - `scripts/docx_math.py` — Word equation objects and layout primitives
 - `scripts/check_marks.py` — mark and tick arithmetic
 - `scripts/check_layout.py` — page count, blank pages, pagination parity
