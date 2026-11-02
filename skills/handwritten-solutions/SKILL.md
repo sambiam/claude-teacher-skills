@@ -146,21 +146,11 @@ Report in two or three lines: where the files are, any box where the working ran
 
 ## Getting the scripts and the glyph library
 
-The scripts (`hand.py`, `inkdoc.py`, `grids.py`, `preview.py`, `from_homework_content.py`), the worked Week 3 example spec and the glyph library (`glyphs.b64`, Sam's handwriting) live in a bundle, kept in two places:
-
-- the Teaching assistant project doc **`claude/handwritten-solutions-bundle.md`** (read it with the Projects tool, `project_read`; it arrives as a local file), or
-- Sam's computer: `06 Cowork/skills/handwritten-solutions/handwritten-solutions-bundle.md` (stage it with `device_stage_files`).
-
-Extract it into a working folder before Step 3:
+Everything is bundled with this skill in its `scripts/` folder: `hand.py`, `inkdoc.py`, `grids.py`, `preview.py`, `from_homework_content.py`, the worked Week 3 example spec (`example_spec_week3.py`) and the glyph library (`glyphs.b64`, Sam's handwriting). Copy them into a working folder before Step 3 (the scripts find `glyphs.b64` next to themselves):
 
 ```bash
-mkdir -p hw_ink && cd hw_ink && python3 - "PATH/TO/handwritten-solutions-bundle.md" <<'PY'
-import re, sys
-text = open(sys.argv[1], encoding='utf-8').read()
-for name, body in re.findall(r'^## Embedded file: (\S+).*?\n````[a-z]*\n(.*?)\n````', text, re.S | re.M):
-    open(name, 'w', encoding='utf-8').write(body + '\n'); print('wrote', name)
-PY
+mkdir -p hw_ink && cp "<path to this skill>/scripts/"* hw_ink/ && cd hw_ink
 pip install lxml pillow --break-system-packages -q 2>/dev/null
 ```
 
-Seven files should be written. LibreOffice (`soffice`) is needed for `--pdf`; install `libreoffice-math` too or Word equations in the question text render as blanks. If the bundle can't be found, stop and say so — don't rebuild the glyph library from memory.
+Seven files should be present. LibreOffice (`soffice`) is needed for `--pdf`; install `libreoffice-math` too or Word equations in the question text render as blanks. If `scripts/` or `glyphs.b64` is missing, stop and say so — don't rebuild the glyph library from memory.

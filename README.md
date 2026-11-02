@@ -43,10 +43,7 @@ Skills that don't depend on a folder (`atomise`, `teaching-sequence`,
 `differentiation-pack`, `non-routine-build`, `practice-select`) will work
 standalone. `sa-task-design` designs and verifies tasks standalone from its
 own offline bank, but needs `deck-build`'s template and scripts to render
-them as slides. `handwritten-solutions` also needs its script and handwriting-glyph bundle
-(`handwritten-solutions-bundle.md`, which wasn't part of the skill upload and so
-isn't in this repo) — the skill tells Claude where to find it and stops if it
-can't. `diagram-labels` is a supporting skill other skills call
+them as slides. `diagram-labels` is a supporting skill other skills call
 into when a diagram needs to go on the page — it isn't invoked directly.
 
 ## What's included
