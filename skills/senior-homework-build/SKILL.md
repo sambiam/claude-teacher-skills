@@ -1,6 +1,6 @@
 ---
 name: "senior-homework-build"
-description: "Build the weekly homework sheet for a Year 10, 11 or 12 maths class — one page consolidating the core skills taught that week, with spaced retrieval of earlier topics, exam-style questions in the course's format, and a separate worked-solutions sheet. Use for senior homework rather than per-lesson worksheets: 'homework for my Year 11s', 'weekly consolidation sheet', 'what should the Methods class do this week', 'they need something to practise over the weekend', 'a revision sheet for the senior class', 'exam practice on this week's work'. Reads the week's lesson decks and atomisations to work out what was actually covered rather than what was planned. Produces two DOCX files."
+description: "Build the weekly homework sheet for a Year 10, 11 or 12 maths class — one page consolidating the core skills taught that week, with spaced retrieval of earlier topics, exam-style questions in the course's format, and a separate worked-solutions sheet handwritten in Sam's writing as Word ink. Use for senior homework rather than per-lesson worksheets: 'homework for my Year 11s', 'weekly consolidation sheet', 'what should the Methods class do this week', 'they need something to practise over the weekend', 'a revision sheet for the senior class', 'exam practice on this week's work'. Reads the week's lesson decks and atomisations to work out what was actually covered rather than what was planned. Produces two DOCX files."
 ---
 
 # Weekly homework for senior classes
@@ -92,6 +92,12 @@ robust when printed at 90%.
 A separate document, not an answer key appended to the sheet — these get handed
 back or displayed, and a solutions section on the student sheet defeats it.
 
+The solutions are **the homework sheet with the working handwritten in Sam's
+writing as Word ink in each working space**, made with the
+`handwritten-solutions` skill (teacher copy; name line reads WORKED SOLUTIONS).
+Check how each method was taught in the week's decks so the working matches
+it.
+
 - Full working for the exam-style questions, laid out as a marker would want to
   see it, with the marks indicated at each stage. This is the part senior
   students learn most from.
@@ -100,9 +106,11 @@ back or displayed, and a solutions section on the student sheet defeats it.
 - Note accept-also forms — equivalent surds, factorised vs expanded — because
   senior work generates these constantly.
 
-Generate both files from **one script with one shared question structure**, and
-a flag that swaps the empty working space for the solution. Maintaining two
-scripts is how answers end up attached to the wrong questions.
+Generate the sheet from **one script with one shared question structure**,
+and have the same script write the `handwritten-solutions` spec (one list of
+lines per working space, `\tick` once per mark on the exam-style questions)
+in the order `grids.py` numbers the spaces. Maintaining two sources is how
+answers end up attached to the wrong questions.
 
 ## Verify
 
@@ -115,16 +123,17 @@ question a student can't do because it's broken costs you their trust and their
 weekend.
 
 Render both files and look at them before delivering: page count, equations,
-line wrapping, working space, nothing orphaned or overflowing.
+line wrapping, working space, nothing orphaned or overflowing — and on the
+solutions, handwriting inside its spaces, legible, ticks equal to marks.
 
 ## Output
 
 ```
 <unit>/homework/<class>-week-<N>.docx
-<unit>/homework/<class>-week-<N>-solutions.docx
+<unit>/homework/<class>-week-<N>-solutions.docx   (handwritten ink)
+<unit>/homework/<class>-week-<N>-solutions.pdf
 ```
 
 Report: which atoms the core section covers, which older topics the retrieval
 section revisits and why those, estimated time, and anything from the week you
 deliberately left out because the class didn't get there.
-

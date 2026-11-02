@@ -1,11 +1,11 @@
 # Maths Teaching Skills Pack
 
-24 skills for planning, building, and auditing maths lessons — atomising
+25 skills for planning, building, and auditing maths lessons — atomising
 content, designing teaching sequences and explanation scripts, building slide
 decks, worksheets, tests, practice, labelled diagrams, and relief lessons, giving feedback on student drafts, grading final assignments,
 and auditing existing resources.
 
-This is a **plugin bundle**: all 24 skills below install in one step,
+This is a **plugin bundle**: all 25 skills below install in one step,
 instead of teachers having to zip and upload each skill individually.
 
 ## How to install
@@ -18,7 +18,7 @@ install the plugin from it:
 /plugin install maths-teaching-skills@claude-teacher-skills
 ```
 
-All 24 skills are added in one go. To update later, run
+All 25 skills are added in one go. To update later, run
 `/plugin marketplace update claude-teacher-skills` followed by
 `/plugin update maths-teaching-skills`.
 
@@ -32,7 +32,7 @@ claude plugin validate .
 
 Several skills (`test-build`, `practice-test-build`, `assessment-audit`,
 `ink-progress`, `deck-build`, `practice-audit`, `senior-homework-build`,
-`explanation-script`, `relief-setter`, `draft-feedback`, `final-grading`, `exam-revision-homework`) work by reading files from an existing
+`explanation-script`, `relief-setter`, `draft-feedback`, `final-grading`, `exam-revision-homework`, `handwritten-solutions`) work by reading files from an existing
 class/topic folder structure rather than from uploads — e.g. prior tests, unit
 outlines, lesson decks, atomisations. For these to work, you'll need an
 equivalent folder layout connected to Claude (matching class → topic →
@@ -43,7 +43,10 @@ Skills that don't depend on a folder (`atomise`, `teaching-sequence`,
 `differentiation-pack`, `non-routine-build`, `practice-select`) will work
 standalone. `sa-task-design` designs and verifies tasks standalone from its
 own offline bank, but needs `deck-build`'s template and scripts to render
-them as slides. `diagram-labels` is a supporting skill other skills call
+them as slides. `handwritten-solutions` also needs its script and handwriting-glyph bundle
+(`handwritten-solutions-bundle.md`, which wasn't part of the skill upload and so
+isn't in this repo) — the skill tells Claude where to find it and stops if it
+can't. `diagram-labels` is a supporting skill other skills call
 into when a diagram needs to go on the page — it isn't invoked directly.
 
 ## What's included
@@ -69,7 +72,8 @@ into when a diagram needs to go on the page — it isn't invoked directly.
 | differentiation-pack | Builds support/extension materials for mixed classes, incl. SSO guided notes |
 | lesson-rationale | Builds the "why are we learning this" slides — prior/future knowledge, hinterland, headache task |
 | senior-homework-build | Builds the weekly Y10-12 homework sheet + solutions from the week's decks |
-| exam-revision-homework | Builds a series of weekly revision homework sets before an exam — printable, questions-only and ticked-solutions versions in the school layout |
+| exam-revision-homework | Builds a series of weekly revision homework sets before an exam — printable, questions-only and handwritten ticked-solutions versions in the school layout |
+| handwritten-solutions | Writes worked solutions in the teacher's own handwriting as real Word ink over a homework, practice test, test or worksheet .docx (used by the solution-producing skills) |
 | ink-progress | Reads ink annotations on a taught deck to work out how far a lesson got |
 | sa-task-design | Designs a task that develops the SA dispositions, from a verified offline bank of 48 tasks |
 | relief-setter | Builds a cover note and self-contained resources for a lesson you won't be there to teach |

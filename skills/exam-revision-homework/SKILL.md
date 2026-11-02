@@ -1,21 +1,21 @@
 ---
 name: "exam-revision-homework"
-description: "Build weekly revision homework sets leading up to an exam or test for any maths class — asks for the teaching schedule and which weeks, then makes printable, questions-only and ticked solutions versions in the school layout and logo."
+description: "Build weekly revision homework sets leading up to an exam or test for any maths class — asks for the teaching schedule and which weeks, then makes printable and questions-only versions in the school layout and logo, plus ticked worked solutions handwritten in Sam's writing over the printable sheet."
 ---
 
 # Weekly revision homework before an exam
 
-Builds one homework set per chosen week for the run-up to an exam or topic test, for any class or course. Each set only uses content the class has already been taught by that week. Each week gets four files:
+Builds one homework set per chosen week for the run-up to an exam or topic test, for any class or course. Each set only uses content the class has already been taught by that week. Each week gets these files:
 
 | File | What it is |
 |---|---|
 | `<PREFIX> Week N - printable.docx` | One double-sided A4 sheet: school logo title block, exam-style dashed square working grids, `[n marks]` right-aligned under each grid |
 | `<PREFIX> Week N - questions only.docx` | The same questions on **one page**, with no grids — for uploading so students work in their books |
-| `<PREFIX> Week N - SOLUTIONS.pdf` (+ `.docx`) | The printable sheet with each grid replaced by a box of red worked solutions and **one ✓ per mark**. It paginates identically to the printable sheet |
+| `<PREFIX> Week N - SOLUTIONS (handwritten).docx` (+ `.pdf`) | The printable sheet with the worked solutions **handwritten in Sam's writing as Word ink** in its working grids, **one tick per mark**, made by `handwritten-solutions`. Same pages as the printable sheet, because it *is* the printable sheet |
 
-All three versions come from **one shared question structure** (`content.py`) and one generator (`homework_gen.py`, embedded below), so answers can never drift away from their questions.
+All versions come from **one shared question structure** (`content.py`) and one generator (`homework_gen.py`, embedded below), so answers can never drift away from their questions. The generator's typed `SOLUTIONS` mode is now only a working draft: the solutions that are delivered are inked over the printable sheet (Step 5b).
 
-Use this skill rather than `senior-homework-build` when the teacher wants a *series* of sheets building towards an assessment, or wants the printable / questions-only / solutions trio. The answer-sheet conventions (solutions inside the working spaces, method/answer ticks, tick count = marks, a human read before release) follow `test-build`.
+Use this skill rather than `senior-homework-build` when the teacher wants a *series* of sheets building towards an assessment, or wants the printable / questions-only / solutions trio. The answer-sheet conventions (solutions inside the working spaces, method/answer ticks, tick count = marks, a human read before release) follow `test-build`, and the solutions are written by `handwritten-solutions`.
 
 ## Step 1 — Intake: ask before building
 
@@ -101,6 +101,17 @@ apt-get install -y libreoffice-math pandoc   # libreoffice-math or equations van
 - Each solution line is `T('text $math$', ticks)`. Put method ticks on the method line and answer ticks on the answer line.
 - Working space is automatic: grids are sized to fit their solution, and `rows` is a minimum. Use `extra=n` for more room; the solutions box grows identically.
 
+### Step 5b — Handwrite the solutions
+
+Load the `handwritten-solutions` skill and follow it. In short:
+
+1. Draft the spec from the week's solution lines:
+   `python from_homework_content.py content.py N > "week N spec.py"` (one region per working block, in order).
+2. **Edit the draft** into Sam's handwritten working: the taught method for each question (check the topic decks — e.g. tangents as `y = f'(a)(x - a) + f(a)`, derivatives via index form then `n × coefficient x^{n-1}`), one step per line, minimal words, no "accept …" notes or prose, `\tick`s where the marks are.
+3. `python inkdoc.py "<PREFIX> Week N - printable.docx" "week N spec.py" "<PREFIX> Week N - SOLUTIONS (handwritten).docx" --pdf` — it must report `ticks = marks` for every grid.
+
+Keep `rows` generous in `content.py`: the grids are sized from the typed solutions, and handwriting is larger. `inkdoc.py` runs steps across the box or slightly below it rather than squashing them; if a box needs more than that, add `extra` rows and rebuild the printable before inking.
+
 ### Rendering traps (LibreOffice shows `¿`)
 
 - A math fragment that starts or ends with `=`: write `= $2x^{7}$`, not `$=2x^{7}$`.
@@ -110,18 +121,19 @@ apt-get install -y libreoffice-math pandoc   # libreoffice-math or equations van
 
 ## Step 6 — Check by eye
 
-Render the solutions PDF at about 80 dpi and look at **every page**:
+Render the handwritten solutions PDF at about 110 dpi and look at **every page** (zoom to 300 dpi on a dense box):
 
-- no clipped last line in any box (fix with `extra`, or merge two short solution lines into one)
-- ticks render
-- fractions and limits render
+- handwriting inside its grids; any run-over below a grid small and clear of the next question
+- strokes smooth and legible: indices, fractions, radicals, decimal points
+- working in the taught method
+- ticks = marks for every question (inkdoc reports it)
 - nothing orphaned
 
 Glance at the printable and questions-only pages too. The generator's parity check catches page drift, but not clipping.
 
 ## Step 7 — Save and report
 
-Save to the class's topic or assessment folder, under `homework/<name of the run>/`. Include the four files per week, plus `generator/` (`content.py`, `homework_gen.py`, `logo.png`) so a question can be changed and everything regenerated. If a file is locked because it's open in Word, save it as `... (v2).docx` and say so.
+Save to the class's topic or assessment folder, under `homework/<name of the run>/`. Include the printable, questions-only and handwritten SOLUTIONS (`.docx` + `.pdf`) files per week, plus `generator/` (`content.py`, `homework_gen.py`, `logo.png`, and each week's handwritten spec) so a question can be changed and everything regenerated and re-inked. If a file is locked because it's open in Word, save it as `... (v2).docx` and say so.
 
 Report:
 
@@ -137,12 +149,12 @@ Report:
 - **Title block:** borderless table. Left: the Banksia Park International High School logo, 3.85 cm wide. Right:
   - `COURSE — TITLE, Week N` in 12 pt bold
   - the focus line in 9.5 pt italic
-  - `Name: ____` | `Due: …` | `Total: n marks` in 10.5 pt bold. On the solutions copy, the Name field reads **WORKED SOLUTIONS (teacher copy)** in red.
+  - `Name: ____` | `Due: …` | `Total: n marks` in 10.5 pt bold. On the solutions copy, the Name field reads **WORKED SOLUTIONS (teacher copy)** in red (`inkdoc.py` does this).
 - Under the title block, an instruction line (9 pt italic) with a grey bottom rule: `CALC_NOTE`, show appropriate steps of logic, the marks tell you how much working is expected, and the suggested time.
 - **Section headings:** 11 pt bold on E7E6E6 shading. The challenge heading uses F2F2F2 shading.
 - **Questions:** bold number with a hanging indent. Sub-parts a), b) are indented. Side-by-side parts sit in borderless columns that line up with the solution columns.
 - **Working grid:** 40 × 0.45 cm squares; dashSmallGap borders in A6A6A6; exact 12.75 pt rows; rows can't split and the grid stays with its question. `[n marks]` (9.5 pt) is right-aligned after the grid.
-- **Solutions:** the same grid with the squares merged into one box per part (dotted dividers between parts). Red C00000 text at 9 pt, with ✓ ticks in Segoe UI Symbol, one per mark.
+- **Solutions:** the printable sheet itself, with Sam's handwriting in red ink (#E71224) in each grid and one handwritten tick per mark (`handwritten-solutions`). The generator's typed solutions mode (merged boxes, red 9 pt text, Segoe UI Symbol ✓) is a draft only.
 - **Questions-only:** no grids. Marks sit in a right-hand column or at the end of the line. Must fit one page.
 
 ## Embedded file: homework_gen.py

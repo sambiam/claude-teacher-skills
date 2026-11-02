@@ -1,6 +1,6 @@
 ---
 name: "worksheet-build"
-description: "Produce a printable mathematics worksheet and matching answer sheet as DOCX — Mild/Medium/Spicy sections plus an Extra Hot challenge, one section per atom, variation-theory sequencing, working space sized per row, real Word equation objects, and answers placed inside the working boxes. Use when the practice genuinely has to be on paper: 'make a worksheet for', 'print something for', 'they need a handout', 'the questions need diagrams', 'a card sort', 'turn these questions into a worksheet', 'regenerate the answer sheet', or after practice-audit reports insufficient practice. For Years 7-9 check first whether questions in the deck answered in books would do instead; for Years 10-12 prefer senior-homework-build. Also edits an existing worksheet and regenerates its answers."
+description: "Produce a printable mathematics worksheet as DOCX and a matching answer sheet handwritten in Sam's writing as Word ink inside the working boxes — Mild/Medium/Spicy sections plus an Extra Hot challenge, one section per atom, variation-theory sequencing, working space sized per row, real Word equation objects. Use when the practice genuinely has to be on paper: 'make a worksheet for', 'print something for', 'they need a handout', 'the questions need diagrams', 'a card sort', 'turn these questions into a worksheet', 'regenerate the answer sheet', or after practice-audit reports insufficient practice. For Years 7-9 check first whether questions in the deck answered in books would do instead; for Years 10-12 prefer senior-homework-build. Also edits an existing worksheet and regenerates its answers."
 ---
 
 # Building worksheets and answer sheets
@@ -39,8 +39,8 @@ whether anything is needed at all.
 - `references/question-design.md` — variation theory, section contents,
   enrichment sources. Read before writing any questions.
 - `references/docx-production.md` — page setup, the working-space table
-  pattern, verified Word equation code, geometry diagram construction, the
-  render-and-check loop. Read before building the DOCX.
+  pattern, verified Word equation code, the render-and-check loop. Read before
+  building the DOCX.
 
 Where this file and a reference file disagree, this file wins.
 
@@ -185,13 +185,19 @@ any page ends half empty. Never deliver an unrendered DOCX.
 A worksheet with wrong answers is worse than no worksheet — it destroys trust
 in everything else the system produces. Flag anything you can't fully verify.
 
-## F — Answer sheet
+## F — Answer sheet (handwritten)
 
-Generate from the **final** worksheet, not a draft. Mirror it: same section
-order, numbering, expressions and positions, with each answer inside the
-working box belonging to its question so a teacher can scan down the page
-instead of cross-referencing a list. Answer-sheet boxes are sized to their
-text.
+The answer sheet is the **final** worksheet with the answers **handwritten in
+Sam's writing as Word ink inside each working box**, made with the
+`handwritten-solutions` skill — not a second typed document. Each answer sits
+in the box belonging to its question, so a teacher can scan down the page
+instead of cross-referencing a list, and the two files can never drift apart.
+
+`python grids.py worksheet.docx` lists every empty working box as its own
+region (`box n`, with the question above it); write `spec.py` with one list of
+lines per box, set `TICKS = False` (worksheets carry no marks), and run
+`inkdoc.py worksheet.docx spec.py "<topic>_answer_sheet.docx" --pdf`. Check how
+each method was taught in the lesson's deck so the working matches it.
 
 - Final answer alone for simple fluency questions.
 - Concise working wherever reasoning matters, and enough method on Spicy and
@@ -203,14 +209,15 @@ text.
 - Note accept-also forms and, where useful, the common wrong answer and what it
   indicates.
 
-Use equation objects here too, and render and inspect this file independently.
+Render the answer sheet PDF and inspect every page: each answer in its own
+box, legible, smooth strokes, nothing running into the next row of questions.
 
 ## Building both files from one script
 
 One script, one shared question data structure — each question carrying its
-expression, final answer and intermediate working — and a boolean that swaps
-the empty working cell for one containing the answer. Hand-copying question
-order between two scripts is where answers drift onto the wrong questions.
+expression, final answer and intermediate working. The script builds the
+worksheet, and also writes the `handwritten-solutions` spec from the same
+data, in box order, so answers can't drift onto the wrong questions.
 
 ## Editing an existing worksheet
 
@@ -218,18 +225,18 @@ The existing document is the source of truth. Preserve the teacher's edits —
 reworded questions and rearranged sections are intentional unless they create a
 mathematical error — and change only what was asked plus formatting that breaks
 as a result. Never silently regenerate from an older version. Regenerate the
-answer sheet by reading the current worksheet, not by editing the previous
+answer sheet by re-inking the current worksheet, not by editing the previous
 answer sheet.
 
 ## Output
 
 ```
 <unit>/<lesson>/<topic>_worksheet.docx
-<unit>/<lesson>/<topic>_answer_sheet.docx
+<unit>/<lesson>/<topic>_answer_sheet.docx      (handwritten ink)
+<unit>/<lesson>/<topic>_answer_sheet.pdf
 ```
 
 Report briefly: question count, estimated working time, which atoms each
 section covers, that both files were rendered and checked, and anything flagged
 as unverified. Don't reprint the question set — the teacher is about to open
 the file.
-
